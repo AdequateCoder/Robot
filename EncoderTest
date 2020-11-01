@@ -1,0 +1,35 @@
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(7,GPIO.OUT)
+GPIO.setup(13,GPIO.OUT)
+GPIO.setup(29,GPIO.IN)
+GPIO.setup(31,GPIO.IN)
+
+def getEncoder(stop):
+    outcome = [0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0]
+    last_AB = 0000
+    counter = 0
+    revolution= 0
+    while(revolution < stop):
+        A = GPIO.input(29)
+        B = GPIO.input(31)
+        current_AB = (A << 1) | B
+        position = (last_AB << 2) | current_AB
+        counter+= outcome[position]
+        revolution = counter/450                     #counter divided by PPR
+        last_AB = current_AB
+        print (revolution)
+    
+try:
+    print ("Program Running...")
+    GPIO.output(7,True)                              #start left motor
+    GPIO.output(13,True)                             #start right motor
+    getEncoder(1)                                    #move number of rotations
+    GPIO.output(7,False)                             #stop left motor
+    GPIO.output(13,False)                            #stop right motor
+    GPIO.cleanup()
+    print("Program Ended.")
+    
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    print("Program Canceled.")
