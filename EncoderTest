@@ -2,33 +2,28 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(7,GPIO.OUT)
 GPIO.setup(13,GPIO.OUT)
-GPIO.setup(29,GPIO.IN)
-GPIO.setup(31,GPIO.IN)
+GPIO.setup(29,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(31,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
-def getEncoder(stop):
-    outcome = [0,1,-1,0,-1,0,0,1,1,0,0,-1,0,-1,1,0]
-    last_AB = 0000
-    counter = 0
-    revolution= 0
-    while(revolution < stop):
-        A = GPIO.input(29)
-        B = GPIO.input(31)
-        current_AB = (A << 1) | B
-        position = (last_AB << 2) | current_AB
-        counter+= outcome[position]
-        revolution = counter/450                     #counter divided by PPR
-        last_AB = current_AB
+counter = 0
+revolution = counter/5320
+
+def upcount():
+        counter+= 1
         print (revolution)
     
 try:
     print ("Program Running...")
-    GPIO.output(7,True)                              #start left motor
-    GPIO.output(13,True)                             #start right motor
-    getEncoder(1)                                    #move number of rotations
-    GPIO.output(7,False)                             #stop left motor
-    GPIO.output(13,False)                            #stop right motor
-    GPIO.cleanup()
-    print("Program Ended.")
+    GPIO.output(7,True)                                             #start left motor
+    GPIO.output(13,True)                                            #start right motor
+    while (revolution<1)
+    GPIO.add_event_detect(29, GPIO.RISING, callback=upcount)        #add to count if pin 1 rises
+    GPIO.add_event_detect(31, GPIO.RISING, callback=upcount)        #add to count if pin 2 rises
+    else:
+        GPIO.output(7,False)                                        #stop left motor
+        GPIO.output(13,False)                                       #stop right motor
+        GPIO.cleanup()
+        print("Program Ended.")
     
 except KeyboardInterrupt:
     GPIO.cleanup()
