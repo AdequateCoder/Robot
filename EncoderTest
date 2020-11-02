@@ -14,14 +14,14 @@ def upcount():
     
 try:
     print ("Program Running...")
-    GPIO.output(7,True)                                             #start left motor
-    GPIO.output(13,True)                                            #start right motor
+    GPIO.output(7,True)                                                 #start left motor
+    GPIO.output(13,True)                                                #start right motor
     while (revolution<1)
-    GPIO.add_event_detect(29, GPIO.RISING, callback=upcount)        #add to count if pin 1 rises
-    GPIO.add_event_detect(31, GPIO.RISING, callback=upcount)        #add to count if pin 2 rises
+        GPIO.add_event_detect(29, GPIO.RISING, callback=upcount)        #add to count if pin 1 rises
+        GPIO.add_event_detect(31, GPIO.RISING, callback=upcount)        #add to count if pin 2 rises
     else:
-        GPIO.output(7,False)                                        #stop left motor
-        GPIO.output(13,False)                                       #stop right motor
+        GPIO.output(7,False)                                            #stop left motor
+        GPIO.output(13,False)                                           #stop right motor
         GPIO.cleanup()
         print("Program Ended.")
     
